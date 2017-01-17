@@ -1,4 +1,11 @@
 /* eslint no-console:0 */
+import React from 'react'
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
+import ReactDOM from 'react-dom'
+import Counter from './containers/Counter'
+import count from './reducers'
+
 export {bootstrap}
 
 const reloading = document.readyState === 'complete'
@@ -8,18 +15,19 @@ if (module.hot) {
   })
   if (reloading) {
     console.log('🔁  HMR Reloading.')
-    onLoad()
   } else {
     console.info('✅  HMR Enabled.')
-    bootstrap()
   }
 } else {
   console.info('❌  HMR Not Supported.')
-  bootstrap()
 }
 
-function bootstrap() {
-  window.addEventListener('load', function() {
-    console.log('content loaded')
-  })
+const render = () => {
+  ReactDOM.render(
+    <Provider store={createStore(count, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())}>
+      <Counter />
+    </Provider>
+    , document.getElementById('root'))
 }
+
+window.onload = () => render()
